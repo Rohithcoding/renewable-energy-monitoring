@@ -48,6 +48,7 @@ class SolarEnergyDataGenerator:
                 
             else:
                 solar_kwh = 0  # No solar production at night
+                efficiency = 0  # No efficiency at night
             
             # Additional solar metrics
             irradiance = max(0, solar_kwh * 10 + random.uniform(-50, 50))  # W/m²
