@@ -1,24 +1,26 @@
-# 🌱 Renewable Energy Monitoring Dashboard
+# ☀️ Solar Energy Monitoring Dashboard
 
-A comprehensive real-time dashboard for monitoring renewable energy production from multiple sources including Solar, Wind, Hydro, and Biomass. Built with Python, Streamlit, and Plotly for interactive data visualization.
+A comprehensive real-time dashboard for monitoring solar energy production and performance. Built with Python, Streamlit, and Plotly for interactive data visualization and detailed solar analytics.
 
 ## 🌟 Features
 
-- **Real-time Monitoring**: Live status of all renewable energy sources
-- **Historical Analysis**: Interactive charts showing energy production trends
-- **Environmental Impact**: Calculate CO₂ avoided, homes powered, and tree equivalents
-- **Performance Analytics**: Track efficiency, peak production, and daily averages
-- **Interactive Visualizations**: Time series, pie charts, bar charts, and metrics
+- **Real-time Solar Monitoring**: Live status of solar panel system performance
+- **Historical Solar Analysis**: Interactive charts showing solar production trends
+- **Environmental Impact**: Calculate CO₂ avoided from solar energy production
+- **Solar Performance Analytics**: Track panel efficiency, irradiance, and temperature effects
+- **Weather Correlation**: Analyze how weather conditions affect solar output
+- **System Health Monitoring**: Track active panels and system capacity
+- **Interactive Visualizations**: Time series, scatter plots, bar charts, and real-time metrics
 - **Responsive Design**: Works on desktop and mobile devices
 
 ## 📊 Dashboard Sections
 
-1. **Live Status**: Current production and efficiency for each energy source
-2. **Historical Trends**: Time series analysis of energy production
-3. **Energy Mix**: Pie chart breakdown of energy sources
-4. **Daily Production**: Stacked bar chart of the last 7 days
-5. **Environmental Impact**: CO₂ reduction and environmental benefits
-6. **Performance Analytics**: System efficiency and production statistics
+1. **Live Solar Status**: Real-time solar production, irradiance, temperature, and system health
+2. **Historical Solar Trends**: Time series analysis of solar energy production over time
+3. **Solar Analytics**: Hourly production patterns and daily solar output trends
+4. **Weather Correlation**: Solar production vs irradiance and temperature vs efficiency charts
+5. **Environmental Impact**: CO₂ reduction and environmental benefits from solar energy
+6. **Performance Analytics**: Solar system efficiency, peak production, and irradiance metrics
 
 ## 🚀 Quick Start
 
@@ -87,10 +89,11 @@ A comprehensive real-time dashboard for monitoring renewable energy production f
 - **Responsive design** that works on all devices
 
 ### Sample Data:
-- **Solar**: Peak production during daylight hours (6 AM - 6 PM)
-- **Wind**: Variable production with realistic wind patterns
-- **Hydro**: Consistent baseline production with minor variations
-- **Biomass**: Steady production with scheduled maintenance periods
+- **Solar Production**: Peak production during daylight hours (6 AM - 6 PM) with realistic sun cycle patterns
+- **Weather Conditions**: Simulated cloud cover, temperature variations, and seasonal effects
+- **Panel Performance**: Efficiency variations based on temperature and irradiance levels
+- **System Health**: Active panel counts and system capacity monitoring
+- **Environmental Factors**: Ambient temperature, panel temperature, and solar irradiance data
 
 ## 🛠️ Technical Stack
 
@@ -123,18 +126,19 @@ python-dateutil==2.8.2
 
 ## 📈 Data Sources
 
-Currently uses simulated data that mimics real renewable energy patterns:
-- **Solar**: Follows sun cycle with weather variations
-- **Wind**: Variable production with seasonal patterns
-- **Hydro**: Consistent flow with reservoir management
-- **Biomass**: Steady production with maintenance schedules
+Currently uses simulated data that mimics real solar energy patterns:
+- **Solar Production**: Follows realistic sun cycle with seasonal variations
+- **Weather Data**: Simulated irradiance, cloud cover, and temperature effects
+- **Panel Performance**: Efficiency variations based on temperature and environmental conditions
+- **System Status**: Panel health monitoring and capacity tracking
 
 ### Connecting Real Data
-To connect real data sources, modify the `RenewableEnergyDataGenerator` class:
+To connect real solar data sources, modify the `SolarEnergyDataGenerator` class:
 ```python
-# Replace simulation with API calls
+# Replace simulation with real solar API calls
 def get_real_solar_data():
-    # Your API integration here
+    # Connect to solar inverter APIs or weather services
+    # Examples: SolarEdge API, Enphase API, OpenWeatherMap
     pass
 ```
 
@@ -160,7 +164,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Rohith Kumar**
 - GitHub: [@Rohithcoding](https://github.com/Rohithcoding)
-- Project: Renewable Energy Monitoring Dashboard
+- Project: Solar Energy Monitoring Dashboard
 
 ## 🙏 Acknowledgments
 
@@ -177,4 +181,4 @@ If you have any questions or need help with deployment, please:
 
 ---
 
-**🌱 Help monitor and promote renewable energy adoption with this dashboard! 🌍**
+**☀️ Monitor and optimize your solar energy production with this dashboard! 🌍**

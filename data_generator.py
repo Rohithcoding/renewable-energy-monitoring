@@ -3,12 +3,16 @@ import numpy as np
 from datetime import datetime, timedelta
 import random
 
-class RenewableEnergyDataGenerator:
+class SolarEnergyDataGenerator:
     def __init__(self):
-        self.energy_sources = ['Solar', 'Wind', 'Hydro', 'Biomass']
+        self.energy_source = 'Solar'
+        # Solar panel specifications
+        self.panel_capacity_kw = 100  # Total solar panel capacity in kW
+        self.num_panels = 400  # Number of solar panels
+        self.panel_efficiency = 0.20  # Panel efficiency (20%)
         
     def generate_historical_data(self, days=30):
-        """Generate historical renewable energy data for the past n days"""
+        """Generate historical solar energy data for the past n days"""
         end_date = datetime.now()
         start_date = end_date - timedelta(days=days)
         
@@ -18,50 +22,101 @@ class RenewableEnergyDataGenerator:
         data = []
         for timestamp in date_range:
             hour = timestamp.hour
+            month = timestamp.month
+            day_of_year = timestamp.timetuple().tm_yday
             
-            # Simulate realistic patterns
-            solar_base = max(0, 100 * np.sin((hour - 6) * np.pi / 12)) if 6 <= hour <= 18 else 0
-            wind_base = 50 + 30 * np.sin(hour * np.pi / 12)
-            hydro_base = 80 + 10 * np.sin(hour * np.pi / 24)
-            biomass_base = 40 + 5 * np.sin(hour * np.pi / 6)
+            # Simulate realistic solar patterns
+            # Base solar irradiance follows sun cycle
+            if 6 <= hour <= 18:
+                # Peak solar hours with bell curve
+                solar_base = 100 * np.sin((hour - 6) * np.pi / 12)
+                
+                # Seasonal variation (higher in summer, lower in winter)
+                seasonal_factor = 0.8 + 0.4 * np.sin((day_of_year - 80) * 2 * np.pi / 365)
+                
+                # Weather variation (clouds, rain, etc.)
+                weather_factor = random.uniform(0.3, 1.0)
+                
+                # Panel temperature effect (efficiency drops at high temps)
+                temp_factor = random.uniform(0.85, 1.0)
+                
+                solar_kwh = solar_base * seasonal_factor * weather_factor * temp_factor
+                
+                # Efficiency and panel degradation
+                efficiency = self.panel_efficiency * random.uniform(0.95, 1.0)
+                solar_kwh *= efficiency
+                
+            else:
+                solar_kwh = 0  # No solar production at night
             
-            # Add some randomness
-            solar = max(0, solar_base + random.uniform(-20, 20))
-            wind = max(0, wind_base + random.uniform(-15, 15))
-            hydro = max(0, hydro_base + random.uniform(-10, 10))
-            biomass = max(0, biomass_base + random.uniform(-5, 5))
+            # Additional solar metrics
+            irradiance = max(0, solar_kwh * 10 + random.uniform(-50, 50))  # W/m²
+            panel_temp = random.uniform(15, 75) if solar_kwh > 0 else random.uniform(5, 25)  # °C
+            ambient_temp = random.uniform(10, 35)  # °C
+            cloud_cover = max(0, min(100, 100 - (solar_kwh / 100) * 100 + random.uniform(-20, 20)))  # %
             
             data.append({
                 'timestamp': timestamp,
-                'solar_kwh': round(solar, 2),
-                'wind_kwh': round(wind, 2),
-                'hydro_kwh': round(hydro, 2),
-                'biomass_kwh': round(biomass, 2),
-                'total_kwh': round(solar + wind + hydro + biomass, 2)
+                'solar_kwh': round(max(0, solar_kwh), 2),
+                'irradiance_wm2': round(irradiance, 1),
+                'panel_temp_c': round(panel_temp, 1),
+                'ambient_temp_c': round(ambient_temp, 1),
+                'cloud_cover_pct': round(cloud_cover, 1),
+                'efficiency_pct': round(efficiency * 100, 2),
+                'panels_active': random.randint(380, 400) if solar_kwh > 0 else 0
             })
         
         return pd.DataFrame(data)
     
     def generate_current_status(self):
-        """Generate current status data for real-time monitoring"""
+        """Generate current solar status data for real-time monitoring"""
         current_time = datetime.now()
         hour = current_time.hour
+        day_of_year = current_time.timetuple().tm_yday
         
-        # Simulate current production
-        solar_current = max(0, 100 * np.sin((hour - 6) * np.pi / 12)) if 6 <= hour <= 18 else 0
-        solar_current += random.uniform(-10, 10)
-        
-        wind_current = 50 + 30 * np.sin(hour * np.pi / 12) + random.uniform(-10, 10)
-        hydro_current = 80 + 10 * np.sin(hour * np.pi / 24) + random.uniform(-5, 5)
-        biomass_current = 40 + 5 * np.sin(hour * np.pi / 6) + random.uniform(-3, 3)
+        # Simulate current solar production
+        if 6 <= hour <= 18:
+            # Base solar production
+            solar_base = 100 * np.sin((hour - 6) * np.pi / 12)
+            
+            # Seasonal variation
+            seasonal_factor = 0.8 + 0.4 * np.sin((day_of_year - 80) * 2 * np.pi / 365)
+            
+            # Current weather conditions
+            weather_factor = random.uniform(0.4, 1.0)
+            temp_factor = random.uniform(0.85, 1.0)
+            
+            solar_current = solar_base * seasonal_factor * weather_factor * temp_factor
+            efficiency = self.panel_efficiency * random.uniform(0.95, 1.0)
+            solar_current *= efficiency
+            
+            # Current environmental conditions
+            current_irradiance = max(0, solar_current * 10 + random.uniform(-50, 50))
+            current_panel_temp = random.uniform(25, 75)
+            current_ambient_temp = random.uniform(15, 35)
+            current_cloud_cover = max(0, min(100, 100 - (solar_current / 100) * 100 + random.uniform(-20, 20)))
+            panels_active = random.randint(385, 400)
+            
+        else:
+            solar_current = 0
+            current_irradiance = 0
+            current_panel_temp = random.uniform(5, 20)
+            current_ambient_temp = random.uniform(5, 20)
+            current_cloud_cover = random.uniform(0, 100)
+            panels_active = 0
+            efficiency = 0
         
         return {
             'timestamp': current_time,
-            'solar': {'current_kwh': max(0, round(solar_current, 2)), 'efficiency': round(random.uniform(85, 95), 1)},
-            'wind': {'current_kwh': max(0, round(wind_current, 2)), 'efficiency': round(random.uniform(80, 92), 1)},
-            'hydro': {'current_kwh': max(0, round(hydro_current, 2)), 'efficiency': round(random.uniform(88, 96), 1)},
-            'biomass': {'current_kwh': max(0, round(biomass_current, 2)), 'efficiency': round(random.uniform(75, 88), 1)},
-            'total_current_kwh': round(max(0, solar_current) + max(0, wind_current) + max(0, hydro_current) + max(0, biomass_current), 2)
+            'current_kwh': round(max(0, solar_current), 2),
+            'efficiency_pct': round(efficiency * 100, 2) if efficiency > 0 else 0,
+            'irradiance_wm2': round(current_irradiance, 1),
+            'panel_temp_c': round(current_panel_temp, 1),
+            'ambient_temp_c': round(current_ambient_temp, 1),
+            'cloud_cover_pct': round(current_cloud_cover, 1),
+            'panels_active': panels_active,
+            'total_panels': self.num_panels,
+            'system_capacity_kw': self.panel_capacity_kw
         }
     
     def generate_environmental_impact(self, total_kwh):
